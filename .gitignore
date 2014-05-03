@@ -1,0 +1,8 @@
+syntax: glob
+*.user
+*.suo
+bin
+obj
+msbuild.log
+packages
+tools/NuGet.exe

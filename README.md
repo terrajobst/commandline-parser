@@ -96,6 +96,8 @@ Sometimes it's handy to think about how you can improve performance.
 ### Missing
 
 - Support for default commands
+- Add ellipses when printing multi value qualifiers and parameters
+- Add argument for non-boolean qualifiers
 - Make -? and --help an intrinsic and remove it from the list
 - Consider making all qualifiers optional and all parameters required
 - Consider making everything option and rely on the consumer to validate

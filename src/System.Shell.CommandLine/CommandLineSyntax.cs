@@ -131,8 +131,6 @@ namespace System.Shell
 
         private T DefineQualifier<T>(string singleLetterName, string longName, T defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
         {
-            // TODO: Ignore if the current command isn't active
-
             EnsureNoParametersSeenForCurrentCommand();
 
             var qualifier = RegisterQualifier(singleLetterName, longName, isRequired, help);

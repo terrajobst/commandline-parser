@@ -34,7 +34,19 @@ namespace System.Shell
         public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref int value, string help)
         {
             syntax.DefineOptionalQualifier(singleLetterName, longName, ref value, int.Parse, help);
-        }       
+        }
+
+        // Qualifier arrays
+
+        public static void DefineQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref string[] value, string help)
+        {
+            syntax.DefineQualifier(singleLetterName, longName, ref value, v => v, help);
+        }
+
+        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref string[] value, string help)
+        {
+            syntax.DefineOptionalQualifier(singleLetterName, longName, ref value, v => v, help);
+        }
 
         // Parameters
 
@@ -66,6 +78,18 @@ namespace System.Shell
         public static void DefineOptionalParameter(this CommandLineSyntax syntax, string name, ref int value, string help)
         {
             syntax.DefineOptionalParameter(name, ref value, int.Parse, help);
+        }
+
+        // Parameter arrays
+
+        public static void DefineParameter(this CommandLineSyntax syntax, string name, ref string[] value, string help)
+        {
+            syntax.DefineParameter(name, ref value, v => v, help);
+        }
+
+        public static void DefineOptionalParameter(this CommandLineSyntax syntax, string name, ref string[] value, string help)
+        {
+            syntax.DefineOptionalParameter(name, ref value, v => v, help);
         }
     }
 }

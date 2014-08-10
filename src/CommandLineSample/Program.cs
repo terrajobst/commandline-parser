@@ -23,6 +23,9 @@ namespace CommandLineSample
             var repository = string.Empty;
             var refSpec = string.Empty;
 
+            var sourceFiles = new string[0];
+            var references = new string[0];
+
             CommandLine.Parse(args, syntax =>
             {
                 // Global qualifiers
@@ -43,6 +46,11 @@ namespace CommandLineSample
                 syntax.DefineOptionalQualifier(null, "all", ref fetchAll, "fetch from all remotes");
                 syntax.DefineParameter("repository", ref repository, "repository to pull from");
                 syntax.DefineParameter("refspec", ref refSpec, "refspec to be pulled. Please note that this help text is quite extensive and should be completely read. Also note how it flows around quite nicely.");
+
+                // Compile
+                syntax.DefineCommand("compile", ref command, "Compile the sources using the C# compiler");
+                syntax.DefineOptionalQualifier("r", "reference", ref references, "Reference metadata from the specified assembly files");
+                syntax.DefineParameter("file", ref sourceFiles, "C# source from the specified source files");
             });
 
             Console.WriteLine("command    = {0}", command);
@@ -65,6 +73,12 @@ namespace CommandLineSample
                     Console.WriteLine("fetchAll   = {0}", fetchAll);
                     Console.WriteLine("repository = {0}", repository);
                     Console.WriteLine("refSpec    = {0}", refSpec);
+                    break;
+                case "compile":
+                    foreach (var value in references)
+                        Console.WriteLine("reference  = {0}", value);
+                    foreach (var value in sourceFiles)
+                        Console.WriteLine("source     = {0}", value);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

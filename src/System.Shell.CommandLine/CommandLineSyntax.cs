@@ -124,12 +124,35 @@ namespace System.Shell
             value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, true);
         }
 
+        public void DefineQualifier<T>(string singleLetterName, string longName, ref T[] value, Func<string, T> valueConverter, string help)
+        {
+            value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, true);
+        }
+
         public void DefineOptionalQualifier<T>(string singleLetterName, string longName, ref T value, Func<string, T> valueConverter, string help)
         {
             value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, false);
         }
 
+        public void DefineOptionalQualifier<T>(string singleLetterName, string longName, ref T[] value, Func<string, T> valueConverter, string help)
+        {
+            value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, false);
+        }
+
         private T DefineQualifier<T>(string singleLetterName, string longName, T defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        {
+            var arrayDefault = new[] { defaultValue };
+            var result = DefineQualifier(singleLetterName, longName, arrayDefault, valueConverter, help, isRequired);
+            if (result.Length > 1)
+            {
+                var name = singleLetterName != null ? "-" + singleLetterName : "--" + longName;
+                throw new CommandLineSyntaxException(string.Format("qualifier {0} is specified multiple times", name));
+            }
+
+            return result.Last();
+        }
+
+        private T[] DefineQualifier<T>(string singleLetterName, string longName, T[] defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
         {
             EnsureNoParametersSeenForCurrentCommand();
 
@@ -138,9 +161,9 @@ namespace System.Shell
             if (_parsedCommand != _definedCommand)
                 return defaultValue;
 
-            var result = defaultValue;
+            var result = new List<T>();
             var argumentIndex = 0;
-            var isBoolean = typeof (T) == typeof (bool);
+            var isBoolean = typeof(T) == typeof(bool);
 
             while (argumentIndex < _arguments.Count)
             {
@@ -151,18 +174,23 @@ namespace System.Shell
                     string valueText;
                     if (TryGetValue(ref argumentIndex, isBoolean, out valueText))
                     {
-                        result = ParseQualifierValue(longName, valueConverter, valueText);
+                        var value = ParseQualifierValue(longName, valueConverter, valueText);
+                        result.Add(value);
                     }
                     else if (isBoolean)
                     {
-                        result = (T)(object)true;
+                        var value = (T)(object)true;
+                        result.Add(value);
                     }
                 }
 
                 argumentIndex++;
             }
 
-            return result;
+            if (result.Any())
+                return result.ToArray();
+
+            return defaultValue;
         }
 
         public void DefineParameter<T>(string name, ref T value, Func<string, T> valueConverter, string help)
@@ -170,7 +198,17 @@ namespace System.Shell
             value = DefineParameter(name, value, valueConverter, help, true);
         }
 
+        public void DefineParameter<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
+        {
+            value = DefineParameter(name, value, valueConverter, help, true);
+        }
+
         public void DefineOptionalParameter<T>(string name, ref T value, Func<string, T> valueConverter, string help)
+        {
+            value = DefineParameter(name, value, valueConverter, help, false);
+        }
+
+        public void DefineOptionalParameter<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
         {
             value = DefineParameter(name, value, valueConverter, help, false);
         }
@@ -188,6 +226,32 @@ namespace System.Shell
                 parameter.MarkMatched();
                 return ParseParameterValue(name, valueConverter, value);
             }
+
+            return defaultValue;
+        }
+
+        private T[] DefineParameter<T>(string name, T[] defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        {
+            var parameter = RegisterParameter(name, isRequired, help);
+
+            if (_parsedCommand != _definedCommand)
+                return defaultValue;
+
+            var result = new List<T>();
+
+            while (true)
+            {
+                string value;
+                if (!TryGetNextParameter(out value))
+                    break;
+
+                parameter.MarkMatched();
+                var parsedValue = ParseParameterValue(name, valueConverter, value);
+                result.Add(parsedValue);
+            }
+
+            if (result.Any())
+                return result.ToArray();
 
             return defaultValue;
         }

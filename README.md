@@ -97,7 +97,6 @@ Sometimes it's handy to think about how you can improve performance.
 
 - Make declaring qualifiers simpler by having a simple name that is pipe
   separated
-- Support for arrays in options, e.g. -s first.cs -s second.cs
 - Support for default commands
 - Make -? and --help an intrinsic and remove it from the list
 - Consider making all qualifiers optional and all parameters required

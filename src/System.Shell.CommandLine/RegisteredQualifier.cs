@@ -1,32 +1,37 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace System.Shell
 {
     internal sealed class RegisteredQualifier : RegisteredArgument
     {
-        private readonly string _singleLetterName;
-        private readonly string _longName;
+        private readonly ReadOnlyCollection<string> _names;
+        private readonly string _name;
 
-        public RegisteredQualifier(RegisteredCommand command, string singleLetterName, string longName, bool isRequired, string help)
+        public RegisteredQualifier(RegisteredCommand command, IEnumerable<string> names, bool isRequired, string help)
             : base(command, isRequired, help)
         {
-            _singleLetterName = singleLetterName;
-            _longName = longName;
+            _names = new ReadOnlyCollection<string>(names.ToArray());
+            var firstLongName = _names.Where(n => n.Length > 1).FirstOrDefault();
+            var firstName = _names.First();
+            _name = firstLongName ?? firstName;
         }
 
-        public string SingleLetterName
+        public string Name
         {
-            get { return _singleLetterName; }
+            get { return _name; }
         }
 
-        public bool HasSingleLetterName
+        public ReadOnlyCollection<string> Names
         {
-            get { return !string.IsNullOrEmpty(_singleLetterName); }
+            get { return _names; }
         }
 
-        public string LongName
+        public bool HasMultipleNames
         {
-            get { return _longName; }
+            get { return _names.Skip(1).Any(); }
         }
     }
 }

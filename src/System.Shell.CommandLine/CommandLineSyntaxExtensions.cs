@@ -6,46 +6,46 @@ namespace System.Shell
     {
         // Qualifiers
 
-        public static void DefineQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref string value, string help)
+        public static void DefineQualifier(this CommandLineSyntax syntax, string name, ref string value, string help)
         {
-            syntax.DefineQualifier(singleLetterName, longName, ref value, v => v, help);
+            syntax.DefineQualifier(name, ref value, v => v, help);
         }
 
-        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref string value, string help)
+        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string name, ref string value, string help)
         {
-            syntax.DefineOptionalQualifier(singleLetterName, longName, ref value, v => v, help);
+            syntax.DefineOptionalQualifier(name, ref value, v => v, help);
         }
 
-        public static void DefineQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref bool value, string help)
+        public static void DefineQualifier(this CommandLineSyntax syntax, string name, ref bool value, string help)
         {
-            syntax.DefineQualifier(singleLetterName, longName, ref value, bool.Parse, help);
+            syntax.DefineQualifier(name, ref value, bool.Parse, help);
         }
 
-        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref bool value, string help)
+        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string name, ref bool value, string help)
         {
-            syntax.DefineOptionalQualifier(singleLetterName, longName, ref value, bool.Parse, help);
+            syntax.DefineOptionalQualifier(name, ref value, bool.Parse, help);
         }
 
-        public static void DefineQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref int value, string help)
+        public static void DefineQualifier(this CommandLineSyntax syntax, string name, ref int value, string help)
         {
-            syntax.DefineQualifier(singleLetterName, longName, ref value, int.Parse, help);
+            syntax.DefineQualifier(name, ref value, int.Parse, help);
         }
 
-        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref int value, string help)
+        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string name, ref int value, string help)
         {
-            syntax.DefineOptionalQualifier(singleLetterName, longName, ref value, int.Parse, help);
+            syntax.DefineOptionalQualifier(name, ref value, int.Parse, help);
         }
 
         // Qualifier arrays
 
-        public static void DefineQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref string[] value, string help)
+        public static void DefineQualifier(this CommandLineSyntax syntax, string name, ref string[] value, string help)
         {
-            syntax.DefineQualifier(singleLetterName, longName, ref value, v => v, help);
+            syntax.DefineQualifier(name, ref value, v => v, help);
         }
 
-        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string singleLetterName, string longName, ref string[] value, string help)
+        public static void DefineOptionalQualifier(this CommandLineSyntax syntax, string name, ref string[] value, string help)
         {
-            syntax.DefineOptionalQualifier(singleLetterName, longName, ref value, v => v, help);
+            syntax.DefineOptionalQualifier(name, ref value, v => v, help);
         }
 
         // Parameters

@@ -95,8 +95,6 @@ Sometimes it's handy to think about how you can improve performance.
 
 ### Missing
 
-- Make declaring qualifiers simpler by having a simple name that is pipe
-  separated
 - Support for default commands
 - Make -? and --help an intrinsic and remove it from the list
 - Consider making all qualifiers optional and all parameters required
@@ -104,6 +102,7 @@ Sometimes it's handy to think about how you can improve performance.
   requirements
 - Consider custom syntax schemes
 - Support undocumented switches
+- Consider supporting a case insensitive mode
 
 ### Code
 

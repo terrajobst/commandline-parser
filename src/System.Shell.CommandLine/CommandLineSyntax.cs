@@ -49,24 +49,20 @@ namespace System.Shell
             return registeredCommand;
         }
 
-        private RegisteredQualifier RegisterQualifier(string singleLetterName, string longName, bool isRequired, string help)
+        private RegisteredQualifier RegisterQualifier(string name, bool isRequired, string help)
         {
-            if (string.IsNullOrEmpty(longName))
-                throw new ArgumentException("You must specify a longName", "longName");
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("You must specify a name", "name");
 
-            if (!string.IsNullOrEmpty(singleLetterName))
+            var names = name.Split('|').Select(n => n.Trim());
+
+            foreach (var alias in names)
             {
-                if (singleLetterName.Length > 1)
-                    throw new ArgumentException(string.Format("Single letter name '{0}' has more than one character", singleLetterName));
-
-                if (!_knownQualifierNames.Add(singleLetterName))
-                    throw new ArgumentException(string.Format("Qualifier '{0}' is already registered.", singleLetterName));
+                if (!_knownQualifierNames.Add(alias))
+                    throw new ArgumentException(string.Format("Qualifier '{0}' is already registered.", alias));
             }
 
-            if (!_knownQualifierNames.Add(longName))
-                throw new ArgumentException(string.Format("Qualifier '{0}' is already registered.", longName));
-
-            var registeredQualifier = new RegisteredQualifier(_definedCommand, singleLetterName, longName, isRequired, help);
+            var registeredQualifier = new RegisteredQualifier(_definedCommand, names, isRequired, help);
             _registeredQualifiers.Add(registeredQualifier);
 
             return registeredQualifier;
@@ -119,44 +115,41 @@ namespace System.Shell
             _parsedCommand = _definedCommand;
         }
 
-        public void DefineQualifier<T>(string singleLetterName, string longName, ref T value, Func<string, T> valueConverter, string help)
+        public void DefineQualifier<T>(string name, ref T value, Func<string, T> valueConverter, string help)
         {
-            value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, true);
+            value = DefineQualifier(name, value, valueConverter, help, true);
         }
 
-        public void DefineQualifier<T>(string singleLetterName, string longName, ref T[] value, Func<string, T> valueConverter, string help)
+        public void DefineQualifier<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
         {
-            value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, true);
+            value = DefineQualifier(name, value, valueConverter, help, true);
         }
 
-        public void DefineOptionalQualifier<T>(string singleLetterName, string longName, ref T value, Func<string, T> valueConverter, string help)
+        public void DefineOptionalQualifier<T>(string name, ref T value, Func<string, T> valueConverter, string help)
         {
-            value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, false);
+            value = DefineQualifier(name, value, valueConverter, help, false);
         }
 
-        public void DefineOptionalQualifier<T>(string singleLetterName, string longName, ref T[] value, Func<string, T> valueConverter, string help)
+        public void DefineOptionalQualifier<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
         {
-            value = DefineQualifier(singleLetterName, longName, value, valueConverter, help, false);
+            value = DefineQualifier(name, value, valueConverter, help, false);
         }
 
-        private T DefineQualifier<T>(string singleLetterName, string longName, T defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        private T DefineQualifier<T>(string name, T defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
         {
             var arrayDefault = new[] { defaultValue };
-            var result = DefineQualifier(singleLetterName, longName, arrayDefault, valueConverter, help, isRequired);
+            var result = DefineQualifier(name, arrayDefault, valueConverter, help, isRequired);
             if (result.Length > 1)
-            {
-                var name = singleLetterName != null ? "-" + singleLetterName : "--" + longName;
                 throw new CommandLineSyntaxException(string.Format("qualifier {0} is specified multiple times", name));
-            }
 
             return result.Last();
         }
 
-        private T[] DefineQualifier<T>(string singleLetterName, string longName, T[] defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        private T[] DefineQualifier<T>(string name, T[] defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
         {
             EnsureNoParametersSeenForCurrentCommand();
 
-            var qualifier = RegisterQualifier(singleLetterName, longName, isRequired, help);
+            var qualifier = RegisterQualifier(name, isRequired, help);
 
             if (_parsedCommand != _definedCommand)
                 return defaultValue;
@@ -167,14 +160,14 @@ namespace System.Shell
 
             while (argumentIndex < _arguments.Count)
             {
-                if (TryGetNextQualifier(ref argumentIndex, singleLetterName, longName))
+                if (TryGetNextQualifier(ref argumentIndex, qualifier.Names))
                 {
                     qualifier.MarkMatched();
 
                     string valueText;
                     if (TryGetValue(ref argumentIndex, isBoolean, out valueText))
                     {
-                        var value = ParseQualifierValue(longName, valueConverter, valueText);
+                        var value = ParseQualifierValue(qualifier.Name, valueConverter, valueText);
                         result.Add(value);
                     }
                     else if (isBoolean)
@@ -256,7 +249,7 @@ namespace System.Shell
             return defaultValue;
         }
 
-        private bool TryGetNextQualifier(ref int argumentIndex, string singleLetterName, string longName)
+        private bool TryGetNextQualifier(ref int argumentIndex, IReadOnlyCollection<string> names)
         {
             while (argumentIndex < _arguments.Count)
             {
@@ -264,8 +257,7 @@ namespace System.Shell
 
                 if (a.IsQualifier)
                 {
-                    if (string.Equals(a.Name, singleLetterName, StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(a.Name, longName, StringComparison.OrdinalIgnoreCase))
+                    if (names.Any(n => string.Equals(a.Name, n, StringComparison.OrdinalIgnoreCase)))
                     {
                         a.MarkMatched();
                         return true;
@@ -344,9 +336,9 @@ namespace System.Shell
             return false;
         }
 
-        private static T ParseQualifierValue<T>(string longName, Func<string, T> valueConverter, string valueText)
+        private static T ParseQualifierValue<T>(string name, Func<string, T> valueConverter, string valueText)
         {
-            return ParseValue(longName, true, valueConverter, valueText);
+            return ParseValue(name, true, valueConverter, valueText);
         }
 
         private static T ParseParameterValue<T>(string parameterName, Func<string, T> valueConverter, string valueText)
@@ -414,7 +406,7 @@ namespace System.Shell
             foreach (var qualifier in GetQualifiers(_parsedCommand))
             {
                 if (qualifier.IsRequired && qualifier.IsMissing)
-                    throw new CommandLineSyntaxException(string.Format("required qualifier '{0}' not specified", qualifier.LongName));
+                    throw new CommandLineSyntaxException(string.Format("required qualifier '{0}' not specified", qualifier.Name));
             }
 
             // Search for required parameters
@@ -607,22 +599,26 @@ namespace System.Shell
 
             if (registeredQualifier.IsOptional)
                 sb.Append("[");
-            else if (registeredQualifier.HasSingleLetterName)
+            else if (registeredQualifier.HasMultipleNames)
                 sb.Append("(");
 
-            if (registeredQualifier.HasSingleLetterName)
-            {
-                sb.Append("-");
-                sb.Append(registeredQualifier.SingleLetterName);
-                sb.Append("|");
-            }
+            var isFirst = true;
 
-            sb.Append("--");
-            sb.Append(registeredQualifier.LongName);
+            foreach (var name in registeredQualifier.Names)
+            {
+                if (isFirst)
+                    isFirst = false;
+                else
+                    sb.Append("|");
+
+                var separator = name.Length == 1 ? "-" : "--";
+                sb.Append(separator);
+                sb.Append(name);
+            }
 
             if (registeredQualifier.IsOptional)
                 sb.Append("]");
-            else if (registeredQualifier.HasSingleLetterName)
+            else if (registeredQualifier.HasMultipleNames)
                 sb.Append(")");
 
             return sb.ToString();
@@ -656,15 +652,19 @@ namespace System.Shell
 
             foreach (var registeredQualifier in GetQualifiers(command))
             {
-                if (registeredQualifier.HasSingleLetterName)
-                {
-                    sb.Append("-");
-                    sb.Append(registeredQualifier.SingleLetterName);
-                    sb.Append(", ");
-                }
+                var isFirst = true;
 
-                sb.Append("--");
-                sb.Append(registeredQualifier.LongName);
+                foreach (var name in registeredQualifier.Names)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        sb.Append(", ");
+
+                    var separator = name.Length == 1 ? "-" : "--";
+                    sb.Append(separator);
+                    sb.Append(name);
+                }
 
                 yield return sb.ToString();
                 sb.Clear();

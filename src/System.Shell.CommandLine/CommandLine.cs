@@ -70,7 +70,7 @@ namespace System.Shell
 
             try
             {
-                syntax.DefineOptionalQualifier("?", "help", ref showHelp, "Shows this help page");
+                syntax.DefineOptionalQualifier("?|help", ref showHelp, "Shows this help page");
                 syntaxAction(syntax);
             }
             catch (CommandLineSyntaxException ex)

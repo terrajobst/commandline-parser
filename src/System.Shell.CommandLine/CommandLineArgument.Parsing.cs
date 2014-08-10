@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace System.Shell
@@ -100,7 +101,7 @@ namespace System.Shell
 
             var hasSeenDashDash = false;
 
-            foreach (var argument in commandLineArguments)
+            foreach (var argument in ExpandReponseFiles(commandLineArguments))
             {
                 if (!hasSeenDashDash && argument == "--")
                 {
@@ -154,6 +155,28 @@ namespace System.Shell
             }
 
             return result.ToArray();
+        }
+
+        private static IEnumerable<string> ExpandReponseFiles(IEnumerable<string> commandLineArguments)
+        {
+            foreach (var argument in commandLineArguments)
+            {
+                if (!argument.StartsWith("@"))
+                {
+                    yield return argument;
+                }
+                else
+                {
+                    var fileName = argument.Substring(1);
+
+                    if (!File.Exists(fileName))
+                        throw new CommandLineSyntaxException(string.Format("Response file '{0}' doesn't exist.", fileName));
+
+                    var responseFileArguments = File.ReadLines(fileName);
+                    foreach (var responseFileArgument in responseFileArguments)
+                        yield return responseFileArgument.Trim();
+                }
+            }
         }
 
         private static bool NeedsSingleLetterExpansion(CommandLineArgument argument)

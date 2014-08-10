@@ -1,6 +1,6 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
-
 using Xunit;
 
 namespace System.Shell.UnitTests
@@ -207,6 +207,52 @@ namespace System.Shell.UnitTests
                 "/xdf"
             };
 
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ArgumentParser_ExpandsReponseFiles()
+        {
+            var responseFile = Path.GetTempFileName();
+            try
+            {
+                File.WriteAllLines(responseFile, new[] {
+                    "-xdf",
+                    "--out:out.exe",
+                    "-r",
+                    @"C:\Reference Assemblies\system.dll",
+                });
+
+                var text = "--before @\"" + responseFile + "\" --after";
+                var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
+                var expected = new[] {
+                    "--before",
+                    "-x",
+                    "-d",
+                    "-f",
+                    "--out:out.exe",
+                    "-r",
+                    @"C:\Reference Assemblies\system.dll",
+                    "--after"
+                };
+
+                Assert.Equal(expected, actual);
+            }
+            finally
+            {
+                File.Delete(responseFile);
+            }
+        }
+
+        [Fact]
+        public void ArgumentParser_ExpandsReponseFiles_UnlessItDoesntExist()
+        {
+            var responseFile = @"C:\non\existing\response_file.txt";
+            var text = "--before @\"" + responseFile + "\" --after";
+            var exception = Assert.Throws<CommandLineSyntaxException>(() => CommandLineArgument.Parse(text));
+            var expected = string.Format("Response file '{0}' doesn't exist.", responseFile);
+            var actual = exception.Message;
+            
             Assert.Equal(expected, actual);
         }
     }

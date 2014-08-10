@@ -99,7 +99,6 @@ Sometimes it's handy to think about how you can improve performance.
   separated
 - Support for arrays in options, e.g. -s first.cs -s second.cs
 - Support for default commands
-- Support response files using @
 - Make -? and --help an intrinsic and remove it from the list
 - Consider making all qualifiers optional and all parameters required
 - Consider making everything option and rely on the consumer to validate

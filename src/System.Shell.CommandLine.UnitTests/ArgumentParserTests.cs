@@ -13,9 +13,9 @@ namespace System.Shell.UnitTests
             var text = "abc def ghi";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
-	            "def",
-	            "ghi"
+                "abc",
+                "def",
+                "ghi"
             };
 
             Assert.Equal(expected, tokens);
@@ -27,9 +27,9 @@ namespace System.Shell.UnitTests
             var text = "abc  def       ghi";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
-	            "def",
-	            "ghi"
+                "abc",
+                "def",
+                "ghi"
             };
 
             Assert.Equal(expected, tokens);
@@ -41,8 +41,8 @@ namespace System.Shell.UnitTests
             var text = "abc \"def  ghi\"";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
-	            "def  ghi"
+                "abc",
+                "def  ghi"
             };
 
             Assert.Equal(expected, tokens);
@@ -54,8 +54,8 @@ namespace System.Shell.UnitTests
             var text = "abc \" def\"";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
-	            "def"
+                "abc",
+                "def"
             };
 
             Assert.Equal(expected, tokens);
@@ -67,8 +67,8 @@ namespace System.Shell.UnitTests
             var text = "abc \"def \"";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
-	            "def"
+                "abc",
+                "def"
             };
 
             Assert.Equal(expected, tokens);
@@ -88,7 +88,7 @@ namespace System.Shell.UnitTests
             var text = "abc \"d\"\"ef\"";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
+                "abc",
                 "d\"ef"
             };
 
@@ -101,7 +101,7 @@ namespace System.Shell.UnitTests
             var text = "abc \"d\\\"ef\"";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abc",
+                "abc",
                 "d\"ef"
             };
 
@@ -114,7 +114,7 @@ namespace System.Shell.UnitTests
             var text = "abc\"\"def";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "abcdef"
+                "abcdef"
             };
 
             Assert.Equal(expected, tokens);
@@ -126,16 +126,16 @@ namespace System.Shell.UnitTests
             var text = "-out test parmeter1.cs -o:test \"parameter with space.cs\" \"p\\\"aram\" \"parameter with \"\".cs\" \"-v=value\" \"-q\"=value -q=\"value\"";
             var tokens = CommandLineArgument.Split(text);
             var expected = new[] {
-	            "-out",
-	            "test",
-	            "parmeter1.cs",
-	            "-o:test",
-	            "parameter with space.cs",
+                "-out",
+                "test",
+                "parmeter1.cs",
+                "-o:test",
+                "parameter with space.cs",
                 "p\"aram",
-	            "parameter with \".cs",
-	            "-v=value",
-	            "-q=value",
-	            "-q=value"
+                "parameter with \".cs",
+                "-v=value",
+                "-q=value",
+                "-q=value"
             };
 
             Assert.Equal(expected, tokens);
@@ -147,9 +147,9 @@ namespace System.Shell.UnitTests
             var text = "abc def ghi";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
             var expected = new[] {
-	            "abc",
-	            "def",
-	            "ghi",
+                "abc",
+                "def",
+                "ghi",
             };
 
             Assert.Equal(expected, actual);
@@ -161,9 +161,9 @@ namespace System.Shell.UnitTests
             var text = "-a /b --c";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
             var expected = new[] {
-	            "-a",
-	            "/b",
-	            "--c"
+                "-a",
+                "/b",
+                "--c"
             };
 
             Assert.Equal(expected, actual);
@@ -175,10 +175,10 @@ namespace System.Shell.UnitTests
             var text = "-a:va /b=vb --c vc";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
             var expected = new[] {
-	            "-a:va",
-	            "/b:vb",
-	            "--c",
-	            "vc"
+                "-a:va",
+                "/b:vb",
+                "--c",
+                "vc"
             };
 
             Assert.Equal(expected, actual);
@@ -190,9 +190,9 @@ namespace System.Shell.UnitTests
             var text = "-xdf";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
             var expected = new[] {
-	            "-x",
-	            "-d",
-	            "-f"
+                "-x",
+                "-d",
+                "-f"
             };
 
             Assert.Equal(expected, actual);
@@ -204,7 +204,7 @@ namespace System.Shell.UnitTests
             var text = "/xdf";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
             var expected = new[] {
-	            "/xdf"
+                "/xdf"
             };
 
             Assert.Equal(expected, actual);

@@ -80,6 +80,24 @@ namespace System.Shell
         public static IReadOnlyList<CommandLineArgument> Parse(IEnumerable<string> commandLineArguments)
         {
             var result = new List<CommandLineArgument>();
+
+            // We'll split the arguments into command line argument objects.
+            //
+            // CommandLineArgument objects combine modifier (/, -, --), the qualifier
+            // name, and the qualifier value.
+            // 
+            // Please note that this code doesn't combine arguments. It only provides
+            // some pre-processing over the arguments to split out the modifier,
+            // qualifier, and value:
+            //
+            // { "--out", "out.exe" } ==> { new CommandLineArgument("--", "out", null),
+            //                              new CommandLineArgument(null, null, "out.exe") }
+            //
+            // {"--out:out.exe" }     ==> { new CommandLineArgument("--", "out", "out.exe") }
+            //
+            // The code also handles the special -- argument which indicates that the following
+            // arguments shouldn't be considered qualifiers.
+
             var hasSeenDashDash = false;
 
             foreach (var argument in commandLineArguments)
@@ -119,6 +137,15 @@ namespace System.Shell
                 var parsedArgument = new CommandLineArgument(modifier, key, value);
                 result.Add(parsedArgument);
             }
+
+            // Single letter options can be combined, for example the following two
+            // forms are considered equivalent:
+            //
+            //    (1)  -xdf
+            //    (2)  -x -d -f
+            //
+            // In order to free later phases from handling this case, we simply expand
+            // single letter options to the second form.
 
             for (var i = result.Count - 1; i >= 0; i--)
             {

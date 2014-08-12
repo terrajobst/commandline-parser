@@ -35,13 +35,13 @@ namespace System.Shell.UnitTests
 
                 var arg1 = false;
                 var arg2 = false;
-                syntax.DefineQualifier("a|arg 1", ref arg1, string.Empty);
-                syntax.DefineQualifier("b|arg 2", ref arg2, string.Empty);
+                syntax.DefineQualifier("a|arg1", ref arg1, string.Empty);
+                syntax.DefineQualifier("b|arg2", ref arg2, string.Empty);
 
                 syntax.Validate();
             });
 
-            Assert.Equal("qualifier -a is specified multiple times", exception.Message);
+            Assert.Equal("qualifier a|arg1 is specified multiple times", exception.Message);
         }
 
         [Fact]

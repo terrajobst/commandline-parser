@@ -4,10 +4,10 @@ using Xunit;
 
 namespace System.UnitTests
 {
-    public class EscapingTests
+    public class Escaping
     {
         [Fact]
-        public void Escaping_Space_IsEscaped()
+        public void Space_IsEscaped()
         {
             var argument = "C:\\Program Files";
             var expected = "\"C:\\Program Files\"";
@@ -17,7 +17,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void Escaping_Quote_IsEscaped()
+        public void Quote_IsEscaped()
         {
             var argument = "C:\\Program \"Files\"";
             var expected = "\"C:\\Program \"\"Files\"\"\"";
@@ -27,7 +27,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void Escaping_TrailingBackslash_IsEscaped()
+        public void TrailingBackslash_IsEscaped()
         {
             var argument = "C:\\test\\";
             var expected = "\"C:\\test\\ \"";
@@ -37,7 +37,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void Escaping_SimpleText_IsNotEscaped()
+        public void SimpleText_IsNotEscaped()
         {
             var argument = "C:\\foo.txt";
             var expected = argument;
@@ -47,7 +47,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void Escaping_Join_HandlesEscaping()
+        public void Join_HandlesEscaping()
         {
             var arguments = new[]
             {

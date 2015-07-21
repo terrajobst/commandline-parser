@@ -4,10 +4,10 @@ using Xunit;
 
 namespace System.UnitTests
 {
-    public class CommandLineSyntaxTests
+    public class CommandLineParsing
     {
         [Fact]
-        public void CommandLineSyntax_DetectsNonExistingQualifier()
+        public void DetectsNonExistingQualifier()
         {
             var commandLine = "-e -d";
 
@@ -25,7 +25,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void CommandLineSyntax_DetectsDuplicateQualifiers()
+        public void DetectsDuplicateQualifiers()
         {
             var commandLine = "-a -b -a";
 
@@ -45,7 +45,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void CommandLineSyntax_ParsesArrayQualifiers()
+        public void ParsesArrayQualifiers()
         {
             var commandLine = "-a x -b -a y";
 
@@ -67,7 +67,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void CommandLineSyntax_ParsesArrayParameters()
+        public void ParsesArrayParameters()
         {
             var commandLine = "source1.cs source2.cs";
 

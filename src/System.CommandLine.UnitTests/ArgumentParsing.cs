@@ -6,10 +6,10 @@ using Xunit;
 
 namespace System.UnitTests
 {
-    public class ArgumentParserTests
+    public class ArgumentParsing
     {
         [Fact]
-        public void ArgumentParser_SplitsSimpleWords()
+        public void SplitsSimpleWords()
         {
             var text = "abc def ghi";
             var tokens = CommandLineArgument.Split(text);
@@ -23,7 +23,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_FoldsMultipleSpaces()
+        public void FoldsMultipleSpaces()
         {
             var text = "abc  def       ghi";
             var tokens = CommandLineArgument.Split(text);
@@ -37,7 +37,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_HandlesQuotes()
+        public void HandlesQuotes()
         {
             var text = "abc \"def  ghi\"";
             var tokens = CommandLineArgument.Split(text);
@@ -50,7 +50,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_TrimsLeadingWhitespaceInQuotes()
+        public void TrimsLeadingWhitespaceInQuotes()
         {
             var text = "abc \" def\"";
             var tokens = CommandLineArgument.Split(text);
@@ -63,7 +63,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_TrimsTrailingWhitespaceInQuotes()
+        public void TrimsTrailingWhitespaceInQuotes()
         {
             var text = "abc \"def \"";
             var tokens = CommandLineArgument.Split(text);
@@ -76,7 +76,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_DetectsUnterminatedQuote()
+        public void DetectsUnterminatedQuote()
         {
             var text = "abc \"def";
             var exeption = Assert.Throws<Exception>(() => CommandLineArgument.Split(text));
@@ -84,7 +84,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_EscapesNestedDoubleQuotes()
+        public void EscapesNestedDoubleQuotes()
         {
             var text = "abc \"d\"\"ef\"";
             var tokens = CommandLineArgument.Split(text);
@@ -97,7 +97,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_EscapesNestedBackslashQuote()
+        public void EscapesNestedBackslashQuote()
         {
             var text = "abc \"d\\\"ef\"";
             var tokens = CommandLineArgument.Split(text);
@@ -110,7 +110,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_FoldsTopLevelDoubleQuotes()
+        public void FoldsTopLevelDoubleQuotes()
         {
             var text = "abc\"\"def";
             var tokens = CommandLineArgument.Split(text);
@@ -122,7 +122,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_DoesTokenizeLikeShell()
+        public void DoesTokenizeLikeShell()
         {
             var text = "-out test parmeter1.cs -o:test \"parameter with space.cs\" \"p\\\"aram\" \"parameter with \"\".cs\" \"-v=value\" \"-q\"=value -q=\"value\"";
             var tokens = CommandLineArgument.Split(text);
@@ -143,7 +143,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_GetsArguments()
+        public void GetsArguments()
         {
             var text = "abc def ghi";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
@@ -157,7 +157,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_GetsOptions()
+        public void GetsOptions()
         {
             var text = "-a /b --c";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
@@ -171,7 +171,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_GetsOptionArguments()
+        public void GetsOptionArguments()
         {
             var text = "-a:va /b=vb --c vc";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
@@ -186,7 +186,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_ExpandsSingleLetterArguments()
+        public void ExpandsSingleLetterArguments()
         {
             var text = "-xdf";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
@@ -200,7 +200,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_ExpandsSingleLetterArguments_UnlessUsingSlash()
+        public void ExpandsSingleLetterArguments_UnlessUsingSlash()
         {
             var text = "/xdf";
             var actual = CommandLineArgument.Parse(text).Select(a => a.ToString());
@@ -212,7 +212,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_ExpandsReponseFiles()
+        public void ExpandsReponseFiles()
         {
             var responseFile = Path.GetTempFileName();
             try
@@ -246,7 +246,7 @@ namespace System.UnitTests
         }
 
         [Fact]
-        public void ArgumentParser_ExpandsReponseFiles_UnlessItDoesntExist()
+        public void ExpandsReponseFiles_UnlessItDoesntExist()
         {
             var responseFile = @"C:\non\existing\response_file.txt";
             var text = "--before @\"" + responseFile + "\" --after";

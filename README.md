@@ -81,7 +81,7 @@ syntaxes. Good example are version control tools, e.g.
 Sometimes having a default make sense. For example, if the tool originally only
 had a single command but now has to support more commands you may want to use
 a default command to avoid breaking existing customers. In other cases it may
-just more convenient to use a default because one command is way more popular
+just more be convenient to use a default because one command is way more popular
 than others.
 
 For example, let's assume that `commit` would be the default command. In that
@@ -91,8 +91,6 @@ case both forms are equivalent:
     .\tool.exe commit -m 'Message'
     .\tool.exe -m 'Message'
 
-Sometimes it's handy to think about how you can improve performance.
-
 ### Missing
 
 - Support for default commands
@@ -100,7 +98,7 @@ Sometimes it's handy to think about how you can improve performance.
 - Add argument for non-boolean qualifiers
 - Make -? and --help an intrinsic and remove it from the list
 - Consider making all qualifiers optional and all parameters required
-- Consider making everything option and rely on the consumer to validate
+- Consider making everything optional and rely on the consumer to validate
   requirements
 - Consider custom syntax schemes
 - Support undocumented switches

@@ -7,8 +7,8 @@
     <ProjectGuid>{3E290EB0-A2E1-403E-9D72-0C49D0AEEF0A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.Shell</RootNamespace>
-    <AssemblyName>System.Shell.CommandLine</AssemblyName>
+    <RootNamespace>System</RootNamespace>
+    <AssemblyName>System.CommandLine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

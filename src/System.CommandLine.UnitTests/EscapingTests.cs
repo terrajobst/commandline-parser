@@ -2,7 +2,7 @@
 
 using Xunit;
 
-namespace System.Shell.UnitTests
+namespace System.UnitTests
 {
     public class EscapingTests
     {

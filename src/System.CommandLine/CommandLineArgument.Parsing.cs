@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace System.Shell
+namespace System
 {
     internal partial class CommandLineArgument
     {

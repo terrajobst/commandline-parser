@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Shell.CommandLine", "System.Shell.CommandLine\System.Shell.CommandLine.csproj", "{3E290EB0-A2E1-403E-9D72-0C49D0AEEF0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.CommandLine", "System.CommandLine\System.CommandLine.csproj", "{3E290EB0-A2E1-403E-9D72-0C49D0AEEF0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineSample", "CommandLineSample\CommandLineSample.csproj", "{A56DBA71-F447-46DE-99CE-EC200C80187F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Shell.CommandLine.UnitTests", "System.Shell.CommandLine.UnitTests\System.Shell.CommandLine.UnitTests.csproj", "{6A0F52AD-8EB3-4BBD-A580-6CB759336806}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.CommandLine.UnitTests", "System.CommandLine.UnitTests\System.CommandLine.UnitTests.csproj", "{6A0F52AD-8EB3-4BBD-A580-6CB759336806}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

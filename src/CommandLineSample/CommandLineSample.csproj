@@ -48,7 +48,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\System.Shell.CommandLine\System.Shell.CommandLine.csproj">
+    <ProjectReference Include="..\System.CommandLine\System.CommandLine.csproj">
       <Project>{3e290eb0-a2e1-403e-9d72-0c49d0aeef0a}</Project>
       <Name>System.Shell.CommandLine</Name>
     </ProjectReference>

@@ -1,6 +1,6 @@
 using System;
 
-namespace System.Shell
+namespace System
 {
     internal abstract class RegisteredArgument
     {

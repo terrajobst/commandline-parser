@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace System.Shell
+namespace System
 {
     internal sealed partial class CommandLineArgument
     {

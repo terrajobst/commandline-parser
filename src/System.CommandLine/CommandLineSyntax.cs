@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace System.Shell
+namespace System
 {
     public sealed class CommandLineSyntax
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace System.Shell
+namespace System
 {
     public class CommandLineSyntaxException : Exception
     {

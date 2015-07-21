@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+
 using Xunit;
 
-namespace System.Shell.UnitTests
+namespace System.UnitTests
 {
     public class ArgumentParserTests
     {

@@ -81,6 +81,8 @@ syntaxes. Good example are version control tools, e.g.
 
 ### Missing
 
+- Qualifiers must currently be unique across all commands. That's not desired.
+  We want them to be unique only across the global and the current command.
 - Add ellipses when printing multi value qualifiers and parameters
 - Add argument for non-boolean qualifiers
 - Make -? and --help an intrinsic and remove it from the list

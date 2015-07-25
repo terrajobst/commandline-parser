@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace System
 {
@@ -31,6 +32,11 @@ namespace System
         {
             DefineQualifier(name, ref value, StringParser, help);
         }
+        
+        public void DefineQualifier(string name, ref int[] value, string help)
+        {
+            DefineQualifier(name, ref value, Int32Parser, help);
+        }
 
         // Parameters
 
@@ -54,6 +60,11 @@ namespace System
         public void DefineParameter(string name, ref string[] value, string help)
         {
             DefineParameter(name, ref value, StringParser, help);
+        }
+
+        public void DefineParameter(string name, ref int[] value, string help)
+        {
+            DefineParameter(name, ref value, Int32Parser, help);
         }
     }
 }

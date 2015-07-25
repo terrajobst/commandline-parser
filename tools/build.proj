@@ -18,6 +18,7 @@
   <ItemGroup>
     <BuildStep Include="$(MSBuildThisFileDirectory)restore.proj" />
     <BuildStep Include="$(MSBuildThisFileDirectory)compile.proj" />
+    <BuildStep Include="$(MSBuildThisFileDirectory)test.proj" />
   </ItemGroup>
 
   <Target Name="Clean">

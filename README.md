@@ -4,17 +4,30 @@ This project is about providing an awesome command line parser for .NET.
 
 Goals:
 
- - Lightweight
- - Very little configuration needed
- - Help strings
- - Support for multiple commands, like version control tools
- - Designed for cross-platform usage
+* Lightweight
+* Very little configuration needed
+* Help strings
+* Support for multiple commands, like version control tools
+* Designed for cross-platform usage
 
 ## Syntax
 
-### Single Letter Options
+The syntax conventions are heavily inspired by the following existing
+conventions:
 
-Single character options are delimited by a single dash, e.g.
+* [Unix History][Unix-History]
+* [POSIX Conventions][POSIX-Conventions]
+* [GNU Standards for Command Line Interfaces][GNU]
+* [GNU List of standard option names][GNU-Options]
+
+[Unix-History]: http://catb.org/~esr/writings/taoup/html/ch10s05.html
+[POSIX-Conventions]: http://www.cs.unicam.it/piergallini/home/materiale/gc/java/essential/attributes/_posix.html
+[GNU]: http://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html
+[GNU-Options]: http://www.gnu.org/prep/standards/html_node/Option-Table.html#Option-Table
+
+### Single Letter Qualifiers
+
+Single character qualifiers are delimited by a single dash, e.g.
 
     .\tool.exe -x -d -f
 
@@ -32,9 +45,9 @@ recognized:
     # This is not equivalent to -xdf
     .\tool.exe /xdf
 
-### Keyword Options
+### Long-named Qualifiers
 
-Keyword based options, also known as long-named options, are delimited by two
+Long-named qualifies, also known as keyword options, are delimited by two
 dashes, such as:
 
     .\tool.exe --verbose
@@ -46,7 +59,7 @@ Alternatively, you can use a slash:
 Using two dashes avoids any ambiguity with bundled forms -- which is why
 slashes don't support bundling.
 
-### Option Arguments
+### Qualifier Arguments
 
 Both, the single letter form, as well as the long forms, support arguments.
 Arguments must be separated by either a space, an equal sign or a colon:
@@ -79,31 +92,21 @@ syntaxes. Good example are version control tools, e.g.
     .\tool.exe pull origin --all
     .\tool.exe commit -m 'Message'
 
+## Work in Progress
+
 ### Missing
 
-- Qualifiers must currently be unique across all commands. That's not desired.
+* Qualifiers must currently be unique across all commands. That's not desired.
   We want them to be unique only across the global and the current command.
-- Add ellipses when printing multi value qualifiers and parameters
-- Add argument for non-boolean qualifiers
-- Make -? and --help an intrinsic and remove it from the list
-- Support undocumented switches
-- Consider supporting a case insensitive mode
+* Add ellipses when printing multi value qualifiers and parameters
+* Add argument for non-boolean qualifiers
+* Make `-?` and `--help` an intrinsic and remove it from the list
+* Support undocumented switches
+* Consider supporting a case insensitive mode
 
 ### Code
 
-- Extract help generation from CommandLineSyntax
-- Review argument checks
-- Add tests
-- Add comments & documentation
-
-## Existing Conventions
-
-* [Unix History][Unix-History]
-* [POSIX Conventions][POSIX-Conventions]
-* [GNU Standards for Command Line Interfaces][GNU]
-* [GNU List of standard option names][GNU-Options]
-
-[Unix-History]: http://catb.org/~esr/writings/taoup/html/ch10s05.html
-[POSIX-Conventions]: http://www.cs.unicam.it/piergallini/home/materiale/gc/java/essential/attributes/_posix.html
-[GNU]: http://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html
-[GNU-Options]: http://www.gnu.org/prep/standards/html_node/Option-Table.html#Option-Table
+* Extract help generation from CommandLineSyntax
+* Review argument checks
+* Add tests
+* Add comments & documentation

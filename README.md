@@ -79,22 +79,8 @@ syntaxes. Good example are version control tools, e.g.
     .\tool.exe pull origin --all
     .\tool.exe commit -m 'Message'
 
-Sometimes having a default make sense. For example, if the tool originally only
-had a single command but now has to support more commands you may want to use
-a default command to avoid breaking existing customers. In other cases it may
-just more be convenient to use a default because one command is way more popular
-than others.
-
-For example, let's assume that `commit` would be the default command. In that
-case both forms are equivalent:
-
-    # Equivalent if 'commit' is the default command
-    .\tool.exe commit -m 'Message'
-    .\tool.exe -m 'Message'
-
 ### Missing
 
-- Support for default commands
 - Add ellipses when printing multi value qualifiers and parameters
 - Add argument for non-boolean qualifiers
 - Make -? and --help an intrinsic and remove it from the list

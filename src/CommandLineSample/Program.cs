@@ -28,27 +28,27 @@ namespace CommandLineSample
             CommandLine.Parse(args, syntax =>
             {
                 // Global qualifiers
-                syntax.DefineOptionalQualifier("q|quiet", ref isQuiet, "do not print names of files removed");
-                syntax.DefineOptionalQualifier("n|dry-run", ref isDryRun, "dry run");
-                syntax.DefineOptionalQualifier("f|force", ref useForce, "force");
+                syntax.DefineQualifier("q|quiet", ref isQuiet, "do not print names of files removed");
+                syntax.DefineQualifier("n|dry-run", ref isDryRun, "dry run");
+                syntax.DefineQualifier("f|force", ref useForce, "force");
 
                 // Commit
                 syntax.DefineCommand("commit", ref command, "Record changes to the repository");
                 syntax.DefineQualifier("m|message", ref message, "commit message");
-                syntax.DefineOptionalQualifier("e|edit", ref edit, "force edit of commit");
-                syntax.DefineOptionalQualifier("s|signoff", ref addSignoff, "add Signed-off-by:");
-                syntax.DefineOptionalParameter("pathspec", ref pathSpec, "Path to a file");
+                syntax.DefineQualifier("e|edit", ref edit, "force edit of commit");
+                syntax.DefineQualifier("s|signoff", ref addSignoff, "add Signed-off-by:");
+                syntax.DefineParameter("pathspec", ref pathSpec, "Path to a file");
 
                 // Pull
                 syntax.DefineCommand("pull", ref command, "Fetch from and integrate with another repository or a local branch");
-                syntax.DefineOptionalQualifier("t|tags", ref fetchTags, "fetch all tags and associated objects");
-                syntax.DefineOptionalQualifier("all", ref fetchAll, "fetch from all remotes");
+                syntax.DefineQualifier("t|tags", ref fetchTags, "fetch all tags and associated objects");
+                syntax.DefineQualifier("all", ref fetchAll, "fetch from all remotes");
                 syntax.DefineParameter("repository", ref repository, "repository to pull from");
                 syntax.DefineParameter("refspec", ref refSpec, "refspec to be pulled. Please note that this help text is quite extensive and should be completely read. Also note how it flows around quite nicely.");
 
                 // Compile
                 syntax.DefineCommand("compile", ref command, "Compile the sources using the C# compiler");
-                syntax.DefineOptionalQualifier("r|reference", ref references, "Reference metadata from the specified assembly files");
+                syntax.DefineQualifier("r|reference", ref references, "Reference metadata from the specified assembly files");
                 syntax.DefineParameter("file", ref sourceFiles, "C# source from the specified source files");
             });
 

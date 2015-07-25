@@ -6,8 +6,8 @@ namespace System
     {
         private readonly string _name;
 
-        public RegisteredParameter(RegisteredCommand command, string name, bool isRequired, string help)
-            : base(command, isRequired, help)
+        public RegisteredParameter(RegisteredCommand command, string name, string help)
+            : base(command, help)
         {
             _name = name;
         }

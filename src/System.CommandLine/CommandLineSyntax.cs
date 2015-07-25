@@ -49,7 +49,7 @@ namespace System
             return registeredCommand;
         }
 
-        private RegisteredQualifier RegisterQualifier(string name, bool isRequired, string help)
+        private RegisteredQualifier RegisterQualifier(string name, string help)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("You must specify a name", "name");
@@ -62,13 +62,13 @@ namespace System
                     throw new ArgumentException(string.Format("Qualifier '{0}' is already registered.", alias));
             }
 
-            var registeredQualifier = new RegisteredQualifier(_definedCommand, names, isRequired, help);
+            var registeredQualifier = new RegisteredQualifier(_definedCommand, names, help);
             _registeredQualifiers.Add(registeredQualifier);
 
             return registeredQualifier;
         }
 
-        private RegisteredParameter RegisterParameter(string name, bool isRequired, string help)
+        private RegisteredParameter RegisterParameter(string name, string help)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("You must specify a name", "name");
@@ -76,7 +76,7 @@ namespace System
             if (!_knownParameterNames.Add(name))
                 throw new ArgumentException(string.Format("Parameter '{0}' is already registered.", name));
 
-            var registeredParameter = new RegisteredParameter(_definedCommand, name, isRequired, help);
+            var registeredParameter = new RegisteredParameter(_definedCommand, name, help);
             _registeredParameters.Add(registeredParameter);
 
             return registeredParameter;
@@ -117,39 +117,29 @@ namespace System
 
         public void DefineQualifier<T>(string name, ref T value, Func<string, T> valueConverter, string help)
         {
-            value = DefineQualifier(name, value, valueConverter, help, true);
+            value = DefineQualifier(name, value, valueConverter, help);
         }
 
         public void DefineQualifier<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
         {
-            value = DefineQualifier(name, value, valueConverter, help, true);
+            value = DefineQualifier(name, value, valueConverter, help);
         }
 
-        public void DefineOptionalQualifier<T>(string name, ref T value, Func<string, T> valueConverter, string help)
-        {
-            value = DefineQualifier(name, value, valueConverter, help, false);
-        }
-
-        public void DefineOptionalQualifier<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
-        {
-            value = DefineQualifier(name, value, valueConverter, help, false);
-        }
-
-        private T DefineQualifier<T>(string name, T defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        private T DefineQualifier<T>(string name, T defaultValue, Func<string, T> valueConverter, string help)
         {
             var arrayDefault = new[] { defaultValue };
-            var result = DefineQualifier(name, arrayDefault, valueConverter, help, isRequired);
+            var result = DefineQualifier(name, arrayDefault, valueConverter, help);
             if (result.Length > 1)
                 throw new CommandLineSyntaxException(string.Format("qualifier {0} is specified multiple times", name));
 
             return result.Last();
         }
 
-        private T[] DefineQualifier<T>(string name, T[] defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        private T[] DefineQualifier<T>(string name, T[] defaultValue, Func<string, T> valueConverter, string help)
         {
             EnsureNoParametersSeenForCurrentCommand();
 
-            var qualifier = RegisterQualifier(name, isRequired, help);
+            var qualifier = RegisterQualifier(name, help);
 
             if (_parsedCommand != _definedCommand)
                 return defaultValue;
@@ -188,27 +178,17 @@ namespace System
 
         public void DefineParameter<T>(string name, ref T value, Func<string, T> valueConverter, string help)
         {
-            value = DefineParameter(name, value, valueConverter, help, true);
+            value = DefineParameter(name, value, valueConverter, help);
         }
 
         public void DefineParameter<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
         {
-            value = DefineParameter(name, value, valueConverter, help, true);
+            value = DefineParameter(name, value, valueConverter, help);
         }
 
-        public void DefineOptionalParameter<T>(string name, ref T value, Func<string, T> valueConverter, string help)
+        private T DefineParameter<T>(string name, T defaultValue, Func<string, T> valueConverter, string help)
         {
-            value = DefineParameter(name, value, valueConverter, help, false);
-        }
-
-        public void DefineOptionalParameter<T>(string name, ref T[] value, Func<string, T> valueConverter, string help)
-        {
-            value = DefineParameter(name, value, valueConverter, help, false);
-        }
-
-        private T DefineParameter<T>(string name, T defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
-        {
-            var parameter = RegisterParameter(name, isRequired, help);
+            var parameter = RegisterParameter(name, help);
 
             if (_parsedCommand != _definedCommand)
                 return defaultValue;
@@ -223,9 +203,9 @@ namespace System
             return defaultValue;
         }
 
-        private T[] DefineParameter<T>(string name, T[] defaultValue, Func<string, T> valueConverter, string help, bool isRequired)
+        private T[] DefineParameter<T>(string name, T[] defaultValue, Func<string, T> valueConverter, string help)
         {
-            var parameter = RegisterParameter(name, isRequired, help);
+            var parameter = RegisterParameter(name, help);
 
             if (_parsedCommand != _definedCommand)
                 return defaultValue;
@@ -399,22 +379,6 @@ namespace System
                     var message = string.Format("extra parameter '{0}'", argument.Name);
                     throw new CommandLineSyntaxException(message);
                 }
-            }
-
-            // Search for required qualifiers
-
-            foreach (var qualifier in GetQualifiers(_parsedCommand))
-            {
-                if (qualifier.IsRequired && qualifier.IsMissing)
-                    throw new CommandLineSyntaxException(string.Format("required qualifier '{0}' not specified", qualifier.Name));
-            }
-
-            // Search for required parameters
-
-            foreach (var parameter in GetParameters(_parsedCommand))
-            {
-                if (parameter.IsRequired && parameter.IsMissing)
-                    throw new CommandLineSyntaxException(string.Format("required parameter '{0}' not specified", parameter.Name));
             }
         }
 
@@ -597,10 +561,7 @@ namespace System
         {
             var sb = new StringBuilder();
 
-            if (registeredQualifier.IsOptional)
-                sb.Append("[");
-            else if (registeredQualifier.HasMultipleNames)
-                sb.Append("(");
+            sb.Append("[");
 
             var isFirst = true;
 
@@ -616,10 +577,7 @@ namespace System
                 sb.Append(name);
             }
 
-            if (registeredQualifier.IsOptional)
-                sb.Append("]");
-            else if (registeredQualifier.HasMultipleNames)
-                sb.Append(")");
+            sb.Append("]");
 
             return sb.ToString();
         }
@@ -628,15 +586,9 @@ namespace System
         {
             var sb = new StringBuilder();
 
-            if (registeredParameter.IsOptional)
-                sb.Append("[");
-
             sb.Append("<");
             sb.Append(registeredParameter.Name);
             sb.Append(">");
-
-            if (registeredParameter.IsOptional)
-                sb.Append("]");
 
             return sb.ToString();
         }

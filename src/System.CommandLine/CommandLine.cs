@@ -70,7 +70,7 @@ namespace System
 
             try
             {
-                syntax.DefineOptionalQualifier("?|help", ref showHelp, "Shows this help page");
+                syntax.DefineQualifier("?|help", ref showHelp, "Shows this help page");
                 syntaxAction(syntax);
             }
             catch (CommandLineSyntaxException ex)

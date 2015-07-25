@@ -10,11 +10,11 @@ namespace System
         private readonly ReadOnlyCollection<string> _names;
         private readonly string _name;
 
-        public RegisteredQualifier(RegisteredCommand command, IEnumerable<string> names, bool isRequired, string help)
-            : base(command, isRequired, help)
+        public RegisteredQualifier(RegisteredCommand command, IEnumerable<string> names, string help)
+            : base(command, help)
         {
             _names = new ReadOnlyCollection<string>(names.ToArray());
-            var firstLongName = _names.Where(n => n.Length > 1).FirstOrDefault();
+            var firstLongName = _names.FirstOrDefault(n => n.Length > 1);
             var firstName = _names.First();
             _name = firstLongName ?? firstName;
         }
@@ -27,11 +27,6 @@ namespace System
         public ReadOnlyCollection<string> Names
         {
             get { return _names; }
-        }
-
-        public bool HasMultipleNames
-        {
-            get { return _names.Skip(1).Any(); }
         }
     }
 }

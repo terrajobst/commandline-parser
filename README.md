@@ -97,10 +97,6 @@ case both forms are equivalent:
 - Add ellipses when printing multi value qualifiers and parameters
 - Add argument for non-boolean qualifiers
 - Make -? and --help an intrinsic and remove it from the list
-- Consider making all qualifiers optional and all parameters required
-- Consider making everything optional and rely on the consumer to validate
-  requirements
-- Consider custom syntax schemes
 - Support undocumented switches
 - Consider supporting a case insensitive mode
 
@@ -110,34 +106,6 @@ case both forms are equivalent:
 - Review argument checks
 - Add tests
 - Add comments & documentation
-
-### Custom Syntax Schemes
-
-As an alternative to defining qualifiers and parameters as required, we could
-specify the usage as a string:
-
-    syntax.DefineUsage("[(--catalog:v | (--datasource:v --database:v) )] [--metadata:v] <repository>");
-    syntax.DefineUsage("[(--catalog:v | (--datasource:v --database:v) )] <source-repository> <target-repository>");
-
-We'd parse that string to a representation like the following. We could walk the
-the tree to determine which usage is "the best" match and provide validation,
-similar to C# overload resolution.
-
-                          Sequence
-                             │
-                      ┌──────┴──────┐
-                      │             │
-                  Optional      Optional
-                      │             │
-                Alternative   --metadata:v
-                      │
-               ┌──────┴──────┐
-               │             │
-         --catalog:v      Sequence
-                             │
-                      ┌──────┴──────┐
-                      │             │
-               --datasource:v  --database:v
 
 ## Existing Conventions
 

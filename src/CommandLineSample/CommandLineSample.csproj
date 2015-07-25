@@ -34,11 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -50,7 +45,7 @@
   <ItemGroup>
     <ProjectReference Include="..\System.CommandLine\System.CommandLine.csproj">
       <Project>{3e290eb0-a2e1-403e-9d72-0c49d0aeef0a}</Project>
-      <Name>System.Shell.CommandLine</Name>
+      <Name>System.CommandLine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

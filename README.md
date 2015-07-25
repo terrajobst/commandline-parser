@@ -8,6 +8,7 @@ Goals:
  - Very little configuration needed
  - Help strings
  - Support for multiple commands, like version control tools
+ - Designed for cross-platform usage
 
 ## Syntax
 

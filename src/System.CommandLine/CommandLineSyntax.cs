@@ -5,7 +5,7 @@ using System.Text;
 
 namespace System
 {
-    public sealed class CommandLineSyntax
+    public sealed partial class CommandLineSyntax
     {
         private readonly IReadOnlyList<CommandLineArgument> _arguments;
 

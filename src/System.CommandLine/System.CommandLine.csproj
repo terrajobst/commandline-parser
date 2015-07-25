@@ -48,7 +48,7 @@
     <Compile Include="CommandLineArgument.Parsing.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="CommandLineSyntax.cs" />
-    <Compile Include="CommandLineSyntaxExtensions.cs" />
+    <Compile Include="CommandLineSyntax.Definers.cs" />
     <Compile Include="CommandLineSyntaxException.cs" />
     <Compile Include="CommandLineArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
